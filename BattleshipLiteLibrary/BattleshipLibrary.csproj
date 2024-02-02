@@ -41,11 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameLogic.cs" />
-    <Compile Include="Models\Enums.cs" />
-    <Compile Include="Models\GridSpotModel.cs" />
-    <Compile Include="Models\PlayerInfoModel.cs" />
+    <Compile Include="Core\Configuration.cs" />
+    <Compile Include="Core\Enums.cs" />
+    <Compile Include="Core\Errors.cs" />
+    <Compile Include="Models\Game.cs" />
+    <Compile Include="Models\Grid.cs" />
+    <Compile Include="Models\Player.cs" />
+    <Compile Include="Models\Ships.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rules\GridManagement.cs" />
+    <Compile Include="Rules\GridValidation.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

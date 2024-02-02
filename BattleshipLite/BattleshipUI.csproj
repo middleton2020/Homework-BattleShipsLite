@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Display\GridShow.cs" />
+    <Compile Include="Display\Messages.cs" />
+    <Compile Include="GamePlay\Rules.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -50,9 +53,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BattleshipLiteLibrary\BattleshipLiteLibrary.csproj">
+    <ProjectReference Include="..\BattleshipLiteLibrary\BattleshipLibrary.csproj">
       <Project>{46C3A3DC-4FC5-491F-8D40-3CF9CE8B7187}</Project>
-      <Name>BattleshipLiteLibrary</Name>
+      <Name>BattleshipLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
