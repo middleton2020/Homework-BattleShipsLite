@@ -4,7 +4,7 @@ BattleShipsLite is a homework project set by IAmTimCorrey. Each of the branches 
 ## Project Requirements
 To build a small, two-player console game the has its roots in the game Battleship from Mattel. There will be a 25-spot grid (A1-E5). Each player will place fice pegs on the board to represwnt their five ships. Players will then take turnes firing on their opponent's ships. The first person to skink all five ships wins.
 
-##TeachersExampleVersion
+## TeachersExampleVersion
 This is the version created by Tim Corry as an example for us to compare our finished code to.
 
 ## ColinFirstVers
