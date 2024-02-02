@@ -4,3 +4,9 @@ C:\Users\me\source\repos\BattleshipLiteApp\BattleshipLiteLibrary\obj\Debug\Battl
 C:\Users\me\source\repos\BattleshipLiteApp\BattleshipLiteLibrary\obj\Debug\BattleshipLiteLibrary.csproj.CoreCompileInputs.cache
 C:\Users\me\source\repos\BattleshipLiteApp\BattleshipLiteLibrary\obj\Debug\BattleshipLiteLibrary.dll
 C:\Users\me\source\repos\BattleshipLiteApp\BattleshipLiteLibrary\obj\Debug\BattleshipLiteLibrary.pdb
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLiteLibrary\bin\Debug\BattleshipLiteLibrary.dll
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLiteLibrary\bin\Debug\BattleshipLiteLibrary.pdb
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLiteLibrary\obj\Debug\BattleshipLiteLibrary.csproj.AssemblyReference.cache
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLiteLibrary\obj\Debug\BattleshipLiteLibrary.csproj.CoreCompileInputs.cache
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLiteLibrary\obj\Debug\BattleshipLiteLibrary.dll
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLiteLibrary\obj\Debug\BattleshipLiteLibrary.pdb
