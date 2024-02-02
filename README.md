@@ -7,7 +7,7 @@ To build a small, two-player console game the has its roots in the game Battlesh
 ## TeachersExampleVersion
 This is the version created by Tim Corry as an example for us to compare our finished code to.
 
-## ColinFirstVers
+## ColinFirstVersion
 This was my first attempt at the project. I decided to co completely 'off script' and work from the basic requirements without any refrence to what Tim was doing (then look over Tim's version later). When I came to review Tim's version, I realised that I'd written this code in too procedural a fashion.
 
 ## ColinSecondVersion
