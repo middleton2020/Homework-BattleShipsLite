@@ -1,0 +1,11 @@
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLibrary\bin\Debug\net5.0\BattleshipLibrary.deps.json
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLibrary\bin\Debug\net5.0\BattleshipLibrary.dll
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLibrary\bin\Debug\net5.0\ref\BattleshipLibrary.dll
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLibrary\bin\Debug\net5.0\BattleshipLibrary.pdb
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLibrary\obj\Debug\net5.0\BattleshipLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLibrary\obj\Debug\net5.0\BattleshipLibrary.AssemblyInfoInputs.cache
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLibrary\obj\Debug\net5.0\BattleshipLibrary.AssemblyInfo.cs
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLibrary\obj\Debug\net5.0\BattleshipLibrary.csproj.CoreCompileInputs.cache
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLibrary\obj\Debug\net5.0\BattleshipLibrary.dll
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLibrary\obj\Debug\net5.0\ref\BattleshipLibrary.dll
+C:\Users\colin\source\repos\Homework-BattleShipsLite\BattleshipLibrary\obj\Debug\net5.0\BattleshipLibrary.pdb
