@@ -1,10 +1,11 @@
 ﻿using BattleshipLibrary.Rules;
 using BattleshipLibrary.Core;
 using System.Collections.Generic;
+using BattleshipLibrary.Interfaces;
 
 namespace BattleshipLibrary.Models
 {
-    public class Ships
+    public class Ships: Square, ISquare
     {
         #region PrivateFields
         private string _shipName;
@@ -50,7 +51,7 @@ namespace BattleshipLibrary.Models
         /// <summary>
         /// Where the prow of the ship can be found in the grid.
         /// </summary>
-        public List<string> CoOrdinates
+        new public List<string> CoOrdinates
         {
             get { return _coOrdinates; }
             set
@@ -63,23 +64,18 @@ namespace BattleshipLibrary.Models
                 }
             }
         }
-
-        public Enums.ShipStatus Status
-        {
-            get { return _status; }
-            set { _status = value; }
-        }
         #endregion
 
         #region Constructors
-        /// <summary>
+       /// <summary>
         /// Set the name of the ship at creation.
         /// </summary>
         /// <param name="inpName">Ship's name.</param>
-        public Ships(string inpName)
+        public Ships(string inpCoOrdinates, string inpName): base(inpCoOrdinates)
         {
             ShipName = inpName;
             _coOrdinates = new List<string>();
+            _coOrdinates.Add(inpCoOrdinates);
         }
         #endregion
 
@@ -104,16 +100,34 @@ namespace BattleshipLibrary.Models
                 _status = Enums.ShipStatus.Sunk;
             }
         }
+
         /// <summary>
-        /// A square has been hit, is this ship in that square?
+        ///  Return the status (object class) of the square.
         /// </summary>
-        /// <param name="inpTargetCoOrds">The square being shot.</param>
-        public void ShipHit(string inpTargetCoOrds)
+        /// <param name="inpGameMode"></param>
+        /// <returns></returns>
+        new public string GetStatus(Enums.GameMode inpGameMode)
         {
-            if (CoOrdinates.Contains(inpTargetCoOrds))
-            {
-                ShipHit();
-            }
+            if (inpGameMode == Enums.GameMode.Setup)
+            { return GetSetupStatus(); }
+            else
+            { return GetPlayStatus(); }
+        }
+        /// <summary>
+        /// Returns the status image (object class) of the square, in Play mode.
+        /// </summary>
+        /// <returns>Character to display in grid.</returns>
+        new public string GetPlayStatus()
+        {
+            return Configuration.BlankMarker;
+        }
+        /// <summary>
+        /// Returns the status image (object class) of the square, in Setup mode.
+        /// </summary>
+        /// <returns>Character to display in grid.</returns>
+        new public string GetSetupStatus()
+        {
+            return Configuration.ShipMarker;
         }
         #endregion
     }

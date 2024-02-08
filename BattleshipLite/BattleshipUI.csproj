@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{823FA978-B48B-4C75-B579-B17EBB6959DD}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>BattleshipLite</RootNamespace>
-    <AssemblyName>BattleshipLite</AssemblyName>
+    <RootNamespace>BattleshipUI</RootNamespace>
+    <AssemblyName>BattleshipUI</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

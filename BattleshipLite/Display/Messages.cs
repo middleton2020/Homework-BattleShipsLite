@@ -54,34 +54,51 @@ namespace BattleShipUI.Display
             Console.Write($"Please enter the co-ordinates for the {inpShipName} ship: ");
         }
         /// <summary>
-        /// Display what the facing selected means.
+        /// Display what the selected facing means.
         /// </summary>
         /// <param name="inpFacing">Selected facing for the ship</param>
         /// <param name="inpSize">Number of squares that the ship fills.</param>
         public static void ShowShipFacing(Enums.Orientation inpFacing, int inpSize)
         {
+            string extraDescription;
+            string shipDisplay;
             switch (inpFacing)
             {
                 case Enums.Orientation.Down:
+                    extraDescription = $"       {inpFacing.ToString()}";
                     for (int i = 0; i < inpSize; i++)
                     {
-                        Console.WriteLine($"        {Configuration.ShipMarker}");
+                        Console.WriteLine($"        {Configuration.ShipMarker} {extraDescription}");
+                        extraDescription = "";
                     }
                     break;
                 case Enums.Orientation.Left:
-                    string shipDisplay = "    ";
+                    shipDisplay = "    ";
+                    extraDescription = $"       {inpFacing.ToString()}";
 
                     for (int i = 0; i < inpSize; i++)
                     {
                         shipDisplay += Configuration.ShipMarker;
                     }
-                    Console.WriteLine(shipDisplay);
+                    Console.WriteLine(shipDisplay + extraDescription);
                     break;
                 case Enums.Orientation.Right:
-                    ShowShipFacing(Enums.Orientation.Left, inpSize);
+                    shipDisplay = "    ";
+                    extraDescription = $"       {inpFacing.ToString()}";
+
+                    for (int i = 0; i < inpSize; i++)
+                    {
+                        shipDisplay += Configuration.ShipMarker;
+                    }
+                    Console.WriteLine(shipDisplay + extraDescription);
                     break;
                 case Enums.Orientation.Up:
-                    ShowShipFacing(Enums.Orientation.Down, inpSize);
+                    extraDescription = $"       {inpFacing.ToString()}";
+                    for (int i = 0; i < inpSize; i++)
+                    {
+                        Console.WriteLine($"        {Configuration.ShipMarker} {extraDescription}");
+                        extraDescription = "";
+                    }
                     break;
             }
         }
@@ -182,6 +199,40 @@ namespace BattleShipUI.Display
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
+        }
+        #endregion
+
+        #region ErrorHandling
+        /// <summary>
+        /// Display an exception as a screen message instead of an error.
+        /// </summary>
+        /// <param name="inpError">The exception to display.</param>
+        public static void MessageOutErrors(ArgumentException inpError)
+        {
+            if (inpError.Message.Contains("(Parameter"))
+            {
+                Console.WriteLine(inpError.ParamName);
+            }
+            else
+            {
+                Console.WriteLine(inpError.Message);
+            }
+        }
+        /// <summary>
+        /// Display an exception as a screen message instead of an error.
+        /// </summary>
+        /// <param name="inpError">The exception to display.</param>
+        public static void MessageOutErrors(ArgumentOutOfRangeException inpError)
+        {
+            if (inpError.Message.Contains("(Parameter") ||
+                inpError.Message.Contains("Parameter name:"))
+            {
+                Console.WriteLine(inpError.ParamName);
+            }
+            else
+            {
+                Console.WriteLine(inpError.Message);
+            }
         }
         #endregion
     }

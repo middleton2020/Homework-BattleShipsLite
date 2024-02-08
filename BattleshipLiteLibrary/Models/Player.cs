@@ -18,10 +18,7 @@ namespace BattleshipLibrary.Models
         /// </summary>
         public string PlayerName
         {
-            get
-            {
-                return _playerName;
-            }
+            get { return _playerName; }
         }
 
         /// <summary>
@@ -59,26 +56,6 @@ namespace BattleshipLibrary.Models
             get { return _playersShips; }
             set { _playersShips = value; }
         }
-
-        /// <summary>
-        /// Calculates how many of the enemy's ships have been sunk.
-        /// </summary>
-        public int SunkShips
-        {
-            get
-            {
-                int sunkShips = 0;
-                foreach (Ships ship in PlayersShips)
-                {
-                    if (ship.Status == Enums.ShipStatus.Sunk)
-                    {
-                        sunkShips += 1;
-                    }
-                }
-
-                return sunkShips;
-            }
-        }
         #endregion
 
         #region Constructors
@@ -113,35 +90,20 @@ namespace BattleshipLibrary.Models
 
         #region Methods
         /// <summary>
-        /// Add a ship to a square of the grid.
+        /// Add a ship to the list of those against the player.
         /// </summary>
-        /// <param name="inpShip">Ship record to add or add square to.</param>
-        public void AddShipSquare(Ships inpShip)
+        /// <param name="inpShip">Ship object to add.</param>
+        /// <param name="inpCoOrdinates">Where the ship is in the grid.</param>
+        public void AddShip(Ships inpShip, string inpCoOrdinates)
         {
-            /// Have we already added the ship?
-            int existingShip = -1;
-            for (int i = 0; i < PlayersShips.Count; i++)
+            _playersGrid.GridSquareList[inpCoOrdinates] = inpShip;
+            if (_playersShips.Contains(inpShip) == false)
             {
-                if (PlayersShips[i].ShipName == inpShip.ShipName)
-                {
-                    existingShip = i;
-                }
+                _playersShips.Add(inpShip);
             }
-
-            // If the ship hasn't been added, then add it here.
-            if (existingShip == -1)
+            if (inpShip.CoOrdinates.Contains(inpCoOrdinates) == false)
             {
-                PlayersShips.Add(inpShip);
-            }
-            // Otherwise, add another co-ordinate to the existing ship.
-            else
-            {
-                Ships testShip = PlayersShips[existingShip];
-                string newCoOrds = inpShip.CoOrdinates[0];
-                if (testShip.CoOrdinates.Contains(newCoOrds) == false)
-                {
-                    testShip.CoOrdinates.Add(newCoOrds);
-                }
+                inpShip.CoOrdinates.Add(inpCoOrdinates);
             }
         }
         #endregion

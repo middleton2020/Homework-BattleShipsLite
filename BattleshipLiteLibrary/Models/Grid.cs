@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using BattleshipLibrary.Core;
-using BattleshipLibrary.Rules;
+using BattleshipLibrary.Interfaces;
 
 namespace BattleshipLibrary.Models
 {
@@ -10,14 +10,14 @@ namespace BattleshipLibrary.Models
     public class Grid
     {
         #region PrivateFields
-        private Dictionary<string, Enums.GridStatus> _gridSquareList;
+        private Dictionary<string, ISquare> _gridSquareList;
         #endregion
 
         #region Properties
         /// <summary>
-        /// List of the grid squares, holding their status against their co-ordinates.
+        /// List of grid squares, holding their type against the co-ordinates.
         /// </summary>
-        public Dictionary<string, Enums.GridStatus> GridSquareList
+        public Dictionary<string, ISquare> GridSquareList
         {
             get { return _gridSquareList; }
             set { _gridSquareList = value; }
@@ -30,40 +30,16 @@ namespace BattleshipLibrary.Models
         /// </summary>
         public Grid()
         {
-            _gridSquareList = new Dictionary<string, Enums.GridStatus>();
+            _gridSquareList = new Dictionary<string, ISquare>();
             foreach (string locationX in Configuration.ValidXLabels)
             {
                 foreach (string locationY in Configuration.ValidYLabels)
                 {
                     string coOrdinate = locationY + locationX;
-                    _gridSquareList.Add(coOrdinate, Enums.GridStatus.Empty);
+                    Square currentSquare = new Square(coOrdinate);
+                    _gridSquareList.Add(coOrdinate, currentSquare);
                 }
             }
-        }
-        #endregion
-
-        #region PseudoPropertyMethods
-        /// <summary>
-        /// Returns the status of the specified grid square.
-        /// </summary>
-        /// <param name="inpCoOrdinates">Co-ordinates of the grid square.</param>
-        /// <returns>Status of the grid square.</returns>
-        public Enums.GridStatus GetGridSquareMode(string inpCoOrdinates)
-        {
-            inpCoOrdinates = GridValidation.ValidCoOrdinates(inpCoOrdinates);
-            return _gridSquareList[inpCoOrdinates];
-        }
-        /// <summary>
-        /// Sets the status of the specific grid square.
-        /// </summary>
-        /// <param name="inpCoOrdinates">Co-ordinates of the grid square.</param>
-        /// <param name="inpNewStatus">Status of the grid square.</param>
-        /// <returns>Success of setting the status.</returns>
-        public bool SetGridSquareMode(string inpCoOrdinates, Enums.GridStatus inpNewStatus)
-        {
-            inpCoOrdinates = GridValidation.ValidCoOrdinates(inpCoOrdinates);
-            _gridSquareList[inpCoOrdinates] = inpNewStatus;
-            return true;
         }
         #endregion
     }

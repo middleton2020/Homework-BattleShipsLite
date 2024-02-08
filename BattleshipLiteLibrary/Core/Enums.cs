@@ -7,17 +7,6 @@ namespace BattleshipLibrary.Core
     public class Enums
     {
         /// <summary>
-        /// Status of a square in the grid.
-        /// </summary>
-        public enum GridStatus
-        {
-            Empty,
-            Hit,
-            Miss,
-            Ship
-        }
-
-        /// <summary>
         /// Is the game in setup or play mode.
         /// </summary>
         public enum GameMode

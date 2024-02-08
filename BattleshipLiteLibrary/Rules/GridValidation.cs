@@ -9,11 +9,11 @@ namespace BattleshipLibrary.Rules
     public static class GridValidation
     {
         #region GridValitaionTools
-        /// <summary>
-        /// Are the specified co-ordinates in the correct format and within the grid?
-        /// </summary>
-        /// <param name="inpCoOrdinates">Co-ordinates to check.</param>
-        /// <returns>The co-ordinates, if they are valid, blank if they are not.</returns>
+        ///// <summary>
+        ///// Are the specified co-ordinates in the correct format and within the grid?
+        ///// </summary>
+        ///// <param name="inpCoOrdinates">Co-ordinates to check.</param>
+        ///// <returns>The co-ordinates, if they are valid, blank if they are not.</returns>
         public static string ValidCoOrdinates(string inpCoOrdinates)
         {
             if (string.IsNullOrWhiteSpace(inpCoOrdinates))
@@ -22,19 +22,12 @@ namespace BattleshipLibrary.Rules
                 Errors.BlankCoOrdinateError();
             }
 
-            string coOrdX;
-            string coOrdY;
             string example;
-
-            (coOrdX, coOrdY) = GridManagement.SplitCoOrdinates(inpCoOrdinates);
+            (string coOrdX, string coOrdY) = GridManagement.SplitCoOrdinates(inpCoOrdinates);
             if (coOrdY.Length > 1)
-            {
-                example = "AC24";
-            }
+            { example = "AC24"; }
             else
-            {
-                example = "D3";
-            }
+            { example = "D3"; }
 
             // Force to co-ordinates to upper case.
             coOrdY = coOrdY.ToUpper();
@@ -142,20 +135,19 @@ namespace BattleshipLibrary.Rules
         /// <returns>Is there a ship in this square?</returns>
         public static bool IsShipThere(string inpCoOrdinates, Player inpPlayer)
         {
-            Enums.GridStatus squareStatus = inpPlayer.PlayersGrid.GetGridSquareMode(inpCoOrdinates);
-            return (squareStatus == Enums.GridStatus.Ship);
+            string gridSquareValue = inpPlayer.PlayersGrid.GridSquareList[inpCoOrdinates].GetSetupStatus();
+            return gridSquareValue == Configuration.ShipMarker;
         }
         /// <summary>
         /// Have we shot at this square before?
         /// </summary>
-        /// <param name="inpCoOrdinates"></param>
-        /// <param name="inpPlayer"></param>
-        /// <returns></returns>
+        /// <param name="inpCoOrdinates">Co-ordinates of the targeted square</param>
+        /// <param name="inpPlayer">Player who's grid we're targeting.</param>
+        /// <returns>Boolean, inidcating if the square has already been shot at.</returns>
         public static bool HaveAlreadyShot(string inpCoOrdinates, Player inpPlayer)
         {
-            Enums.GridStatus squareStatus = inpPlayer.PlayersGrid.GetGridSquareMode(inpCoOrdinates);
-            return (squareStatus == Enums.GridStatus.Hit ||
-                    squareStatus == Enums.GridStatus.Miss);
+            string squareValue = inpPlayer.PlayersGrid.GridSquareList[inpCoOrdinates].GetStatus(Enums.GameMode.Play);
+            return (squareValue != Configuration.BlankMarker);
         }
         #endregion
     }

@@ -1,43 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BattleshipLibrary.Core;
+using BattleshipLibrary.Interfaces;
 using BattleshipLibrary.Models;
-using BattleshipLibrary.Core;
+using System.Collections.Generic;
 
 namespace BattleshipLibrary.Rules
 {
     public class GridManagement
     {
         #region AddShipMethods
-        /// <summary>
-        /// Save the ship's data to the grid.
-        /// </summary>
-        /// <param name="inpShipCoOrds">Where the prow of the ship is in the grid.</param>
-        /// <param name="inpShipFacing">Which way the hull of the ship lies from the prow.</param>
-        /// <param name="inpShip">Ship object we're working with.</param>
-        /// <param name="inpPlayer">Player object that we're updating.</param>
-        public static void SaveShip(string inpShipCoOrds, Enums.Orientation inpShipFacing, Ships inpShip, Player inpPlayer)
-        {
-            try
-            {
-                // Validate the location as we save it.
-                inpShipCoOrds = GridValidation.ValidShipLocation(inpShipCoOrds, inpPlayer);
-                inpShip.Facing = inpShipFacing;
-                inpShip.AddCoOrdinate(inpShipCoOrds);
-                inpPlayer.PlayersGrid.SetGridSquareMode(inpShipCoOrds, Enums.GridStatus.Ship);
-                inpPlayer.AddShipSquare(inpShip);
-
-                // We only care about the ship's facing if it is more than 1 square long.
-                if (inpShip.Size > 1)
-                {
-                    AddLargeShipExtraSquares(inpShipCoOrds, inpShip, inpPlayer);
-                }
-            }
-            catch (IndexOutOfRangeException ex)
-            {
-                RemoveShip(inpShip, inpPlayer);
-                throw (ex);
-            }
-        }
         /// <summary>
         /// If the ship is more than 1 square in length, we'll need to add it to the other squares... 
         /// </summary>
@@ -62,8 +32,7 @@ namespace BattleshipLibrary.Rules
                         }
                         inpShipCoOrds = Configuration.ValidYLabels[currentIndex + i] + xAxis;
                         inpShipCoOrds = GridValidation.ValidShipLocation(inpShipCoOrds, inpPlayer);
-                        inpPlayer.PlayersGrid.SetGridSquareMode(inpShipCoOrds, Enums.GridStatus.Ship);
-                        inpShip.AddCoOrdinate(inpShipCoOrds);
+                        inpPlayer.AddShip(inpShip, inpShipCoOrds);
                     }
 
                     break;
@@ -77,8 +46,7 @@ namespace BattleshipLibrary.Rules
                         }
                         inpShipCoOrds = yAxis + Configuration.ValidXLabels[currentIndex - i];
                         inpShipCoOrds = GridValidation.ValidShipLocation(inpShipCoOrds, inpPlayer);
-                        inpPlayer.PlayersGrid.SetGridSquareMode(inpShipCoOrds, Enums.GridStatus.Ship);
-                        inpShip.AddCoOrdinate(inpShipCoOrds);
+                        inpPlayer.AddShip(inpShip, inpShipCoOrds);
                     }
 
                     break;
@@ -92,8 +60,7 @@ namespace BattleshipLibrary.Rules
                         }
                         inpShipCoOrds = yAxis + Configuration.ValidXLabels[currentIndex + i];
                         inpShipCoOrds = GridValidation.ValidShipLocation(inpShipCoOrds, inpPlayer);
-                        inpPlayer.PlayersGrid.SetGridSquareMode(inpShipCoOrds, Enums.GridStatus.Ship);
-                        inpShip.AddCoOrdinate(inpShipCoOrds);
+                        inpPlayer.AddShip(inpShip, inpShipCoOrds);
                     }
 
                     break;
@@ -107,8 +74,7 @@ namespace BattleshipLibrary.Rules
                         }
                         inpShipCoOrds = Configuration.ValidYLabels[currentIndex - i] + xAxis;
                         inpShipCoOrds = GridValidation.ValidShipLocation(inpShipCoOrds, inpPlayer);
-                        inpPlayer.PlayersGrid.SetGridSquareMode(inpShipCoOrds, Enums.GridStatus.Ship);
-                        inpShip.AddCoOrdinate(inpShipCoOrds);
+                        inpPlayer.AddShip(inpShip, inpShipCoOrds);
                     }
 
                     break;
@@ -117,22 +83,26 @@ namespace BattleshipLibrary.Rules
         /// <summary>
         /// We've failed to save a ship, so make sure that we've not left any populated squares around.
         /// </summary>
-        /// <param name="inpShip">The ship object that we're updating.</param>
-        /// <param name="inpPlayer">Player object that we're updating.</param>
+        /// <param name = "inpShip" > The ship object that we're updating.</param>
+        /// <param name = "inpPlayer" > Player object that we're updating.</param>
         public static void RemoveShip(Ships inpShip, Player inpPlayer)
         {
-            // Nothing has been set yet, so skip it.
-            if (inpShip.CoOrdinates == null)
-            {
-                return;
-            }
-            // Empty any squares that contain this ship.
-            foreach (string coOrdinate in inpShip.CoOrdinates)
-            {
-                inpPlayer.PlayersGrid.GridSquareList[coOrdinate] = Enums.GridStatus.Empty;
-            }
+            Dictionary<string, ISquare> grid = inpPlayer.PlayersGrid.GridSquareList;
 
-            inpShip.CoOrdinates.Clear();
+            // Step through the grid and remove the ship instances.
+            // We need to step through it using co-ordinates as we
+            // cannot update the grid while itterating through it.
+            foreach (string locationX in Configuration.ValidXLabels)
+            {
+                foreach (string locationY in Configuration.ValidYLabels)
+                {
+                    string coOrdinate = locationY + locationX;
+                    if (grid[coOrdinate] == inpShip)
+                    {
+                        grid[coOrdinate] = new Square(coOrdinate);
+                    }
+                }
+            }
         }
         #endregion
 
@@ -158,18 +128,30 @@ namespace BattleshipLibrary.Rules
             int numHits = 0;
             int numShots = 0;
 
-            foreach (KeyValuePair<string, Enums.GridStatus> gridSquare in inpCurrentPlayer.PlayersGrid.GridSquareList)
+            foreach(KeyValuePair <string, ISquare> gridSquare in inpCurrentPlayer.PlayersGrid.GridSquareList)
             {
-                if (gridSquare.Value == Enums.GridStatus.Hit)
+                if(gridSquare.Value.GetStatus(Enums.GameMode.Play) == Configuration.HitMarker)
                 {
                     numHits += 1;
                     numShots += 1;
                 }
-                else if (gridSquare.Value == Enums.GridStatus.Miss)
+                else if(gridSquare.Value.GetStatus(Enums.GameMode.Play) == Configuration.MissMarker)
                 {
                     numShots += 1;
                 }
             }
+            //    foreach (KeyValuePair<string, Enums.GridStatus> gridSquare in inpCurrentPlayer.PlayersGrid.GridSquareList)
+            //    {
+            //        if (gridSquare.Value == Enums.GridStatus.Hit)
+            //        {
+            //            numHits += 1;
+            //            numShots += 1;
+            //        }
+            //        else if (gridSquare.Value == Enums.GridStatus.Miss)
+            //        {
+            //            numShots += 1;
+            //        }
+            //    }
 
             return (numHits, numShots);
         }

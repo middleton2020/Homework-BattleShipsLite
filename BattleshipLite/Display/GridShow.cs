@@ -67,32 +67,7 @@ namespace BattleShipUI.Display
         /// <returns>String to display in square</returns>
         private static string SetSquareContents(string inpGridCoOrdinate, Grid inpDisplayGrid, Enums.GameMode inpMode)
         {
-            string valueEntry = Configuration.BlankMarker;
-            switch (inpDisplayGrid.GetGridSquareMode(inpGridCoOrdinate))
-            {
-                case Enums.GridStatus.Empty:
-                    // And blank for an empty square.
-                    valueEntry = Configuration.BlankMarker;
-                    break;
-                case Enums.GridStatus.Hit:
-                    if (inpMode == Enums.GameMode.Setup)
-                    { valueEntry = Configuration.BlankMarker; }
-                    else
-                    { valueEntry = Configuration.HitMarker; }
-                    break;
-                case Enums.GridStatus.Miss:
-                    if (inpMode == Enums.GameMode.Setup)
-                    { valueEntry = Configuration.BlankMarker; }
-                    else
-                    { valueEntry = Configuration.MissMarker; }
-                    break;
-                case Enums.GridStatus.Ship:
-                    if (inpMode == Enums.GameMode.Setup)
-                    { valueEntry = Configuration.ShipMarker; }
-                    else
-                    { valueEntry = Configuration.BlankMarker; }
-                    break;
-            }
+            string valueEntry = inpDisplayGrid.GridSquareList[inpGridCoOrdinate].GetStatus(inpMode);
 
             return valueEntry;
         }

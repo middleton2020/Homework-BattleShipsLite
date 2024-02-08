@@ -35,7 +35,7 @@ namespace BattleShipUI.GamePlay
                     }
                     catch (ArgumentException ex)
                     {
-                        MessageOutErrors(ex);
+                        Messages.MessageOutErrors(ex);
                         playerName = "";
                     }
                 } while (playerName == "");
@@ -66,7 +66,8 @@ namespace BattleShipUI.GamePlay
             // Set the location for each ship in the grid.
             foreach (KeyValuePair<string, int> ship in Configuration.ShipsList)
             {
-                Ships currentShip = new Ships(ship.Key);
+                //Ships currentShip = new Ships(ship.Key);
+                string shipName = ship.Key;
 
                 // Make the request and display the grid for reference.
                 Messages.PlaceShips(inpPlayer.PlayerName);
@@ -77,25 +78,35 @@ namespace BattleShipUI.GamePlay
                 string shipCoOrds;
                 do
                 {
-                    Enums.Orientation shipFacing = GetShipFacing(currentShip);
+                    Ships currentShip = null;
 
                     // Request the location for the ship.
-                    Messages.RequestShip(currentShip.ShipName);
+                    Messages.RequestShip(shipName);
                     shipCoOrds = Console.ReadLine().ToUpper();
                     try
                     {
-                        GridManagement.SaveShip(shipCoOrds, shipFacing, currentShip, inpPlayer);
+                        // Validate the location before we save it.
+                        shipCoOrds = GridValidation.ValidShipLocation(shipCoOrds, inpPlayer);
+                        currentShip = new Ships(shipCoOrds, shipName);
+                        currentShip.Facing = GetShipFacing(currentShip);
+                        inpPlayer.AddShip(currentShip, shipCoOrds);
+
+                        // We only care about the ship's facing if it is more than 1 square long.
+                        if (currentShip.Size > 1)
+                        {
+                            GridManagement.AddLargeShipExtraSquares(shipCoOrds, currentShip, inpPlayer);
+                        }
                     }
                     // If the location isn't good, display the messages to screen and loop.
                     catch (ArgumentOutOfRangeException ex)
                     {
-                        MessageOutErrors(ex);
+                        Messages.MessageOutErrors(ex);
                         GridManagement.RemoveShip(currentShip, inpPlayer);
                         shipCoOrds = "";
                     }
                     catch (ArgumentException ex)
                     {
-                        MessageOutErrors(ex);
+                        Messages.MessageOutErrors(ex);
                         GridManagement.RemoveShip(currentShip, inpPlayer);
                         shipCoOrds = "";
                     }
@@ -133,7 +144,7 @@ namespace BattleShipUI.GamePlay
                     }
                     catch (ArgumentException ex)
                     {
-                        MessageOutErrors(ex);
+                        Messages.MessageOutErrors(ex);
                     }
                 }
             }
@@ -211,7 +222,7 @@ namespace BattleShipUI.GamePlay
                 // Handle if we've already shot there.
                 catch (ArgumentException ex)
                 {
-                    MessageOutErrors(ex);
+                    Messages.MessageOutErrors(ex);
                     targetCoOrds = "";
                 }
             } while (targetCoOrds == "");
@@ -230,19 +241,15 @@ namespace BattleShipUI.GamePlay
             Player enemyPlayer = GridManagement.GetEnemyPlayer(inpCurrentPlayer, inpPlayersList);
             if (GridValidation.IsShipThere(inpTargetCoOrds, enemyPlayer))
             {
-                enemyPlayer.PlayersGrid.SetGridSquareMode(inpTargetCoOrds, Enums.GridStatus.Hit);
-                foreach (Ships ship in enemyPlayer.PlayersShips)
-                {
-                    ship.ShipHit(inpTargetCoOrds);
-                }
+                enemyPlayer.PlayersGrid.GridSquareList[inpTargetCoOrds] = new Hit(inpTargetCoOrds);
                 Messages.ShotHit();
             }
             else
             {
-                enemyPlayer.PlayersGrid.SetGridSquareMode(inpTargetCoOrds, Enums.GridStatus.Miss);
+                enemyPlayer.PlayersGrid.GridSquareList[inpTargetCoOrds] = new Miss(inpTargetCoOrds);
                 Messages.ShotMiss();
             }
-        }
+    }
         /// <summary>
         /// Have we a winner yet? If so, who is it?
         /// </summary>
@@ -250,13 +257,17 @@ namespace BattleShipUI.GamePlay
         /// <returns></returns>
         private static string WhoHasWon(Player inpCurrentPlayer, Game inpPlayersList)
         {
-            string winnerName = "";
-
             Player enemyPlayer = GridManagement.GetEnemyPlayer(inpCurrentPlayer, inpPlayersList);
 
-            if (enemyPlayer.SunkShips == Configuration.NumShips)
+            string winnerName = inpCurrentPlayer.PlayerName;
+
+            foreach(Ships ship in enemyPlayer.PlayersShips)
             {
-                winnerName = inpCurrentPlayer.PlayerName;
+                if (enemyPlayer.PlayersGrid.GridSquareList.ContainsValue(ship))
+                {
+                winnerName = "";
+                    return winnerName;
+                }
             }
 
             return winnerName;
@@ -278,39 +289,6 @@ namespace BattleShipUI.GamePlay
                 (numHits, numShots) = GridManagement.CalculateScore(enemyPlayer);
 
                 Messages.DisplayResults(player.PlayerName, numHits, numShots);
-            }
-        }
-        #endregion
-
-        #region ErrorHandling
-        /// <summary>
-        /// Display an exception as a screen message instead of an error.
-        /// </summary>
-        /// <param name="inpError">The exception to display.</param>
-        public static void MessageOutErrors(ArgumentException inpError)
-        {
-            if (inpError.Message.Contains("(Parameter"))
-            {
-                Console.WriteLine(inpError.ParamName);
-            }
-            else
-            {
-                Console.WriteLine(inpError.Message);
-            }
-        }
-        /// <summary>
-        /// Display an exception as a screen message instead of an error.
-        /// </summary>
-        /// <param name="inpError">The exception to display.</param>
-        public static void MessageOutErrors(ArgumentOutOfRangeException inpError)
-        {
-            if (inpError.Message.Contains("(Parameter"))
-            {
-                Console.WriteLine(inpError.ParamName);
-            }
-            else
-            {
-                Console.WriteLine(inpError.Message);
             }
         }
         #endregion
